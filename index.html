@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reducción Mamaria — Dr. Ignacio Cifuentes | Cirujano Plástico</title>
+<meta name="description" content="Reducción mamaria con técnica de última generación. Dr. Ignacio Cifuentes, cirujano plástico certificado en Santiago, Chile.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --dark: #111111;
+  --dark-card: #161616;
+  --dark-border: #222222;
+  --pink: #ff2d7b;
+  --pink-soft: #ff5a9e;
+  --pink-glow: rgba(255,45,123,0.25);
+  --pink-subtle: rgba(255,45,123,0.08);
+  --white: #f5f0f0;
+  --gray: #888888;
+  --gray-light: #aaaaaa;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Outfit', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  line-height: 1.7;
+}
+::selection {
+  background: var(--pink);
+  color: var(--black);
+}
+/* ── NOISE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(40px); }
+  to { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to { opacity:1; }
+}
+@keyframes slideRight {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--pink-glow); }
+  50% { box-shadow: 0 0 30px 10px var(--pink-glow); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,10,0.7);
+  border-bottom: 1px solid var(--dark-border);
+  transition: all 0.3s;
+}
+nav.scrolled {
+  padding: 0.8rem 3rem;
+  background: rgba(10,10,10,0.95);
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--white);
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+.nav-logo span { color: var(--pink); }
+.nav-links { display:flex; gap:2rem; align-items:center; }
+.nav-links a {
+  color: var(--gray-light);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.nav-links a:hover { color: var(--pink); }
+.nav-cta {
+  background: var(--pink) !important;
+  color: var(--black) !important;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 500 !important;
+  transition: all 0.3s !important;
+}
+.nav-cta:hover {
+  background: var(--pink-soft) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px var(--pink-glow);
+}
+/* ── HAMBURGER ── */
+.hamburger { display:none; cursor:pointer; flex-direction:column; gap:5px; }
+.hamburger span { width:24px; height:2px; background:var(--white); transition:0.3s; }
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 8rem 3rem 4rem;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, var(--pink-glow) 0%, transparent 70%);
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -15%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255,45,123,0.1) 0%, transparent 70%);
+  animation: float 10s ease-in-out infinite reverse;
+  pointer-events: none;
+}
+.hero-content {
+  max-width: 900px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+.hero-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--pink);
+  border: 1px solid rgba(255,45,123,0.3);
+  padding: 0.5rem 1.5rem;
+  border-radius: 50px;
+  margin-bottom: 2rem;
+  animation: fadeUp 0.8s ease-out;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 700;
+  line-height: 1.05;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s ease-out 0.2s both;
+  letter-spacing: -0.03em;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--pink);
+}
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--gray-light);
+  max-width: 600px;
+  margin: 0 auto 2.5rem;
+  animation: fadeUp 0.8s ease-out 0.4s both;
+  font-weight: 300;
+}
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s ease-out 0.6s both;
+}
+.btn-primary {
+  background: var(--pink);
+  color: var(--black);
+  padding: 1rem 2.5rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.btn-primary:hover {
+  background: var(--pink-soft);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px var(--pink-glow);
+}
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--dark-border);
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-outline:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+  transform: translateY(-3px);
+}
+/* ── SCROLL INDICATOR ── */
+.scroll-indicator {
+  position: absolute;
+  bottom: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: fadeIn 1s ease-out 1.2s both;
+}
+.scroll-indicator span {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+.scroll-line {
+  width: 1px;
+  height: 50px;
+  background: linear-gradient(to bottom, var(--pink), transparent);
+  animation: pulse 2s ease-in-out infinite;
+}
+/* ── SECTIONS ── */
+section { padding: 6rem 3rem; }
+.section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 1rem;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.section-subtitle {
+  color: var(--gray-light);
+  max-width: 600px;
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+}
+/* ── STATS BAR ── */
+.stats {
+  background: var(--dark);
+  border-top: 1px solid var(--dark-border);
+  border-bottom: 1px solid var(--dark-border);
+  padding: 3rem;
+}
+.stats-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  text-align: center;
+}
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: var(--pink);
+  line-height: 1;
+}
+.stat-label {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+/* ── BENEFITS ── */
+.benefits { max-width: 1200px; margin: 0 auto; }
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.benefit-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  overflow: hidden;
+}
+.benefit-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--pink), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s;
+}
+.benefit-card:hover::before { transform: scaleX(1); }
+.benefit-card:hover {
+  border-color: rgba(255,45,123,0.2);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+}
+.benefit-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--pink-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 1.5rem;
+}
+.benefit-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  margin-bottom: 0.8rem;
+  font-weight: 600;
+}
+.benefit-card p {
+  color: var(--gray-light);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+/* ── PROCEDURE ── */
+.procedure { max-width: 1200px; margin: 0 auto; }
+.procedure-timeline {
+  position: relative;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.procedure-timeline::before {
+  content: '';
+  position: absolute;
+  left: 30px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--pink), var(--dark-border));
+}
+.timeline-item {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem 0;
+  position: relative;
+}
+.timeline-dot {
+  width: 60px;
+  min-width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--dark-card);
+  border: 2px solid var(--pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--pink);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s;
+}
+.timeline-item:hover .timeline-dot {
+  background: var(--pink);
+  color: var(--black);
+  box-shadow: 0 0 30px var(--pink-glow);
+}
+.timeline-content h3 {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+.timeline-content p {
+  color: var(--gray-light);
+  font-size: 0.92rem;
+}
+.timeline-content .tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: var(--pink);
+  border: 1px solid rgba(255,45,123,0.3);
+  padding: 0.2rem 0.8rem;
+  border-radius: 50px;
+  margin-top: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+/* ── FAQ ── */
+.faq { max-width: 750px; margin: 0 auto; }
+.faq-item {
+  border-bottom: 1px solid var(--dark-border);
+  padding: 1.5rem 0;
+}
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 400;
+  transition: color 0.3s;
+  gap: 1rem;
+}
+.faq-question:hover { color: var(--pink); }
+.faq-icon {
+  width: 30px;
+  min-width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--dark-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s;
+  color: var(--pink);
+}
+.faq-item.active .faq-icon {
+  background: var(--pink);
+  color: var(--black);
+  border-color: var(--pink);
+  transform: rotate(45deg);
+}
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  color: var(--gray-light);
+  font-size: 0.95rem;
+}
+.faq-item.active .faq-answer {
+  max-height: 300px;
+  padding-top: 1rem;
+}
+/* ── CTA SECTION ── */
+.cta-section {
+  text-align: center;
+  padding: 8rem 3rem;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(255,45,123,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-section .section-title {
+  max-width: 700px;
+  margin: 0 auto 1rem;
+}
+.cta-section .section-subtitle {
+  margin: 0 auto 2.5rem;
+}
+.cta-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: 16px;
+  padding: 1.5rem 2.5rem;
+  margin-top: 2rem;
+}
+.cta-box-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: var(--pink-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+.cta-box-text {
+  text-align: left;
+}
+.cta-box-text span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gray);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.cta-box-text a {
+  color: var(--pink);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+.cta-box-text a:hover { color: var(--pink-soft); }
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--dark-border);
+  padding: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+footer p {
+  color: var(--gray);
+  font-size: 0.82rem;
+}
+.footer-links { display:flex; gap:1.5rem; }
+.footer-links a {
+  color: var(--gray);
+  text-decoration: none;
+  font-size: 0.82rem;
+  transition: color 0.3s;
+}
+.footer-links a:hover { color: var(--pink); }
+/* ── FLOATING WA BUTTON ── */
+.wa-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 25px rgba(37,211,102,0.4);
+  z-index: 999;
+  transition: all 0.3s;
+  text-decoration: none;
+  animation: pulse 3s ease-in-out infinite;
+}
+.wa-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 35px rgba(37,211,102,0.5);
+}
+.wa-float svg { width:28px; height:28px; fill:#fff; }
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); gap:1.5rem; }
+  .benefits-grid { grid-template-columns: 1fr; }
+  nav { padding: 1rem 1.5rem; }
+  section { padding: 4rem 1.5rem; }
+  .hero { padding: 7rem 1.5rem 3rem; }
+}
+@media (max-width: 650px) {
+  .nav-links { display:none; }
+  .hamburger { display:flex; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--dark);
+    padding: 2rem;
+    border-bottom: 1px solid var(--dark-border);
+    gap: 1rem;
+  }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 2.6rem; }
+  .cta-box { flex-direction: column; text-align: center; }
+  .cta-box-text { text-align: center; }
+}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Dr. <span>Cifuentes</span></a>
+  <div class="nav-links" id="navLinks">
+    <a href="#beneficios">Beneficios</a>
+    <a href="#procedimiento">Procedimiento</a>
+    <a href="#faq">Preguntas</a>
+    <a href="#contacto" class="nav-cta">Agendar Consulta</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <span class="hero-tag">✦ Cirugía Plástica Certificada</span>
+    <h1>Reducción <em>Mamaria</em></h1>
+    <p class="hero-sub">Recupera tu comodidad, bienestar y confianza con una cirugía segura, personalizada y de resultados naturales.</p>
+    <div class="hero-buttons">
+      <a href="#contacto" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        Agendar Consulta
+      </a>
+      <a href="#procedimiento" class="btn-outline">Conocer el Procedimiento</a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Explorar</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+<!-- STATS -->
+<section class="stats reveal">
+  <div class="stats-grid">
+    <div>
+      <div class="stat-number">15+</div>
+      <div class="stat-label">Años de Experiencia</div>
+    </div>
+    <div>
+      <div class="stat-number">98%</div>
+      <div class="stat-label">Satisfacción</div>
+    </div>
+    <div>
+      <div class="stat-number">3</div>
+      <div class="stat-label">Clínicas en Santiago</div>
+    </div>
+    <div>
+      <div class="stat-number">24h</div>
+      <div class="stat-label">Contacto Directo</div>
+    </div>
+  </div>
+</section>
+<!-- BENEFITS -->
+<section id="beneficios" class="benefits">
+  <div class="reveal">
+    <span class="section-label">¿Por qué operarse?</span>
+    <h2 class="section-title">Beneficios de la<br>Reducción Mamaria</h2>
+    <p class="section-subtitle">Más allá de la estética, esta cirugía transforma tu calidad de vida de forma integral.</p>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">🩺</div>
+      <h3>Alivio del Dolor</h3>
+      <p>Eliminación del dolor crónico de espalda, cuello y hombros causado por el exceso de peso mamario. Recupera tu movilidad sin molestias.</p>
+    </div>
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">🏃‍♀️</div>
+      <h3>Vida Activa</h3>
+      <p>Vuelve a disfrutar del ejercicio, deportes y actividades diarias que antes resultaban incómodas o dolorosas.</p>
+    </div>
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">✨</div>
+      <h3>Confianza Renovada</h3>
+      <p>Mejora tu imagen corporal y autoestima. Siéntete cómoda con tu cuerpo y elige la ropa que quieras sin restricciones.</p>
+    </div>
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">🩹</div>
+      <h3>Menos Irritaciones</h3>
+      <p>Solución definitiva a las irritaciones cutáneas, intertrigo e infecciones debajo del pliegue mamario.</p>
+    </div>
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">😴</div>
+      <h3>Mejor Descanso</h3>
+      <p>Duerme sin incomodidad. Muchas pacientes reportan una mejora significativa en la calidad del sueño post-operatorio.</p>
+    </div>
+    <div class="benefit-card reveal">
+      <div class="benefit-icon">💪</div>
+      <h3>Mejor Postura</h3>
+      <p>Corrección postural natural al reducir el peso excesivo en el tórax anterior, aliviando la tensión muscular crónica.</p>
+    </div>
+  </div>
+</section>
+<!-- PROCEDURE -->
+<section id="procedimiento" class="procedure">
+  <div class="reveal" style="text-align:center; margin-bottom:3rem;">
+    <span class="section-label">Paso a Paso</span>
+    <h2 class="section-title">Tu Proceso Quirúrgico</h2>
+    <p class="section-subtitle" style="margin:0 auto;">Cada etapa está diseñada para brindarte seguridad, comodidad y los mejores resultados.</p>
+  </div>
+  <div class="procedure-timeline">
+    <div class="timeline-item reveal">
+      <div class="timeline-dot">01</div>
+      <div class="timeline-content">
+        <h3>Consulta Personalizada</h3>
+        <p>Evaluación médica completa, revisión de expectativas y planificación quirúrgica a medida. Discutiremos las mejores técnicas para tu caso.</p>
+        <span class="tag">45-60 min</span>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot">02</div>
+      <div class="timeline-content">
+        <h3>Preparación Pre-Operatoria</h3>
+        <p>Exámenes de laboratorio, ecografía mamaria y evaluación anestésica. Te entregaremos todas las indicaciones pre-quirúrgicas.</p>
+        <span class="tag">1-2 semanas antes</span>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot">03</div>
+      <div class="timeline-content">
+        <h3>Cirugía</h3>
+        <p>Procedimiento bajo anestesia general con técnica de pedículo seguro. Reducción del volumen mamario, reposición del complejo areola-pezón y remodelación.</p>
+        <span class="tag">2-3 horas</span>
+      </div>
+    </div>
+    <div class="timeline-item reveal">
+      <div class="timeline-dot">04</div>
+      <div class="timeline-content">
+        <h3>Recuperación Guiada</h3>
+        <p>Alta al día siguiente con seguimiento cercano. Controles semanales durante el primer mes y acompañamiento hasta tu recuperación completa.</p>
+        <span class="tag">4-6 semanas</span>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FAQ -->
+<section id="faq">
+  <div class="faq reveal">
+    <span class="section-label">Resolvemos tus dudas</span>
+    <h2 class="section-title">Preguntas Frecuentes</h2>
+    <p class="section-subtitle">Las consultas más comunes sobre la reducción mamaria.</p>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Quedarán cicatrices visibles?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Las cicatrices siguen un patrón en forma de T invertida o ancla. Con el tiempo y cuidados adecuados, se vuelven discretas. Utilizamos técnicas de cierre que minimizan la cicatrización y te indicaremos tratamientos post-operatorios para optimizar el resultado.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Es cubierta por FONASA o Isapre?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">En casos de macromastia documentada con síntomas asociados, la reducción mamaria puede tener cobertura parcial o total a través de FONASA e Isapres. Te ayudaremos con toda la documentación necesaria para gestionar tu cobertura.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Podré amamantar después?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Dependiendo de la técnica utilizada, en muchos casos se preserva la capacidad de lactancia. Utilizamos técnicas de pedículo que mantienen la conexión entre la glándula y el pezón, maximizando las posibilidades de lactancia futura.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Cuánto tiempo de reposo necesitaré?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Generalmente recomendamos 2 semanas de reposo laboral. Actividades físicas leves se pueden retomar a las 4 semanas, y ejercicio de alto impacto a partir de las 6-8 semanas, siempre con evaluación médica previa.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question" onclick="toggleFaq(this)">
+        ¿Desde qué edad se puede realizar?
+        <span class="faq-icon">+</span>
+      </div>
+      <div class="faq-answer">Se recomienda esperar hasta que el desarrollo mamario esté completo, generalmente después de los 18 años. En casos excepcionales con síntomas severos, se puede evaluar en pacientes más jóvenes con consentimiento parental.</div>
+    </div>
+  </div>
+</section>
+<!-- CTA -->
+<section id="contacto" class="cta-section">
+  <div class="reveal">
+    <span class="section-label">Da el primer paso</span>
+    <h2 class="section-title">Tu bienestar comienza con<br>una <em style="font-family:var(--font-display);color:var(--pink);font-style:italic;">conversación</em></h2>
+    <p class="section-subtitle">Agenda tu consulta presencial o virtual. Sin compromiso, con total confidencialidad.</p>
+    <a href="#" class="btn-primary" style="font-size:1.05rem; padding:1.1rem 3rem;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      Agendar Consulta Ahora
+    </a>
+    <div class="cta-box" style="margin-top:2.5rem;">
+      <div class="cta-box-icon">📍</div>
+      <div class="cta-box-text">
+        <span>Clínicas en Santiago</span>
+        <a href="#">BUPA · Clínica Las Condes · Clínica Alemana</a>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Dr. Ignacio Cifuentes — Cirujano Plástico. Todos los derechos reservados.</p>
+  <div class="footer-links">
+    <a href="#">Instagram</a>
+    <a href="#">LinkedIn</a>
+    <a href="#">Política de Privacidad</a>
+  </div>
+</footer>
+<!-- WHATSAPP -->
+<a href="https://wa.me/569XXXXXXXX?text=Hola%20Dr.%20Cifuentes,%20me%20interesa%20una%20consulta%20de%20reducci%C3%B3n%20mamaria" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 100);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  document.querySelectorAll('.faq-item').forEach(i => {
+    if (i !== item) i.classList.remove('active');
+  });
+  item.classList.toggle('active');
+}
+// Mobile menu
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
+// Close mobile menu on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.remove('open');
+  });
+});
+// Counter animation
+function animateCounters() {
+  const counters = document.querySelectorAll('.stat-number');
+  counters.forEach(counter => {
+    const text = counter.textContent;
+    const num = parseInt(text);
+    if (isNaN(num)) return;
+    const suffix = text.replace(/[0-9]/g, '');
+    let current = 0;
+    const step = Math.ceil(num / 40);
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= num) {
+        current = num;
+        clearInterval(timer);
+      }
+      counter.textContent = current + suffix;
+    }, 30);
+  });
+}
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCounters();
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.5 });
+const statsSection = document.querySelector('.stats');
+if (statsSection) statsObserver.observe(statsSection);
+</script>
+</body>
+</html>
