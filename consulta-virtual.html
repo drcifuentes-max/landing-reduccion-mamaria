@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Cifuentes · Consulta Virtual · Reducción Mamaria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --black:#0a0a0a;
+            --dark:#111;
+            --card:#1c1c1c;
+            --border:#2c2c2c;
+            --pink:#e8547a;
+            --pink2:#f07a96;
+            --pdim:rgba(232,84,122,0.12);
+            --white:#f0ebe8;
+            --muted:#555;
+            --text:#ddd;
+        }
+        *{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        html{ height:100%; height:-webkit-fill-available; }
+        body{
+            height:100%; height:-webkit-fill-available;
+            background:var(--black); color:var(--text);
+            font-family:'DM Sans',sans-serif;
+            overflow:hidden; position:fixed; width:100%; top:0; left:0;
+        }
+        .app{
+            display:flex; flex-direction:column;
+            height:100%; height:-webkit-fill-available;
+            background:var(--dark); max-width:480px; margin:0 auto;
+        }
+        /* HEADER */
+        header{
+            flex-shrink:0; background:var(--black);
+            border-bottom:1px solid var(--border);
+            padding:12px 16px; padding-top:max(12px,env(safe-area-inset-top));
+            display:flex; align-items:center; gap:10px;
+        }
+        .av-wrap{ position:relative; flex-shrink:0; }
+        .av{
+            width:42px; height:42px; border-radius:50%;
+            background:#1a0810; border:1.5px solid var(--pink);
+            display:flex; align-items:center; justify-content:center;
+            font-size:1.2rem; box-shadow:0 0 14px var(--pdim);
+        }
+        .online{
+            width:9px; height:9px; background:#4ade80;
+            border-radius:50%; border:2px solid var(--black);
+            position:absolute; bottom:0; right:0;
+            animation:blink 2.5s ease-in-out infinite;
+        }
+        @keyframes blink{ 0%,100%{opacity:1} 50%{opacity:.3} }
+        .hinfo h1{
+            font-family:'Cormorant Garamond',serif; font-size:1rem;
+            font-weight:600; color:var(--white); line-height:1.2;
+        }
+        .hinfo p{
+            font-size:.63rem; color:var(--pink2); text-transform:uppercase;
+            letter-spacing:.07em; font-weight:500; margin-top:2px;
+        }
+        .share-hbtn{
+            margin-left:auto; background:var(--pdim);
+            border:1px solid rgba(232,84,122,.35); color:var(--pink2);
+            font-size:.65rem; font-weight:600; letter-spacing:.05em;
+            text-transform:uppercase; padding:6px 10px; border-radius:99px;
+            display:flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap;
+        }
+        .share-hbtn:active{ background:rgba(232,84,122,.25); }
+        /* PROGRESS */
+        .pbar{
+            flex-shrink:0; background:#0d0d0d;
+            border-bottom:1px solid var(--border);
+            padding:7px 16px; display:flex; align-items:center; gap:10px;
+        }
+        .ptrack{ flex:1; height:3px; background:var(--border); border-radius:99px; overflow:hidden; }
+        .pfill{
+            height:100%; background:linear-gradient(90deg,#b02d52,var(--pink2));
+            border-radius:99px; transition:width .5s ease; width:0%;
+        }
+        .plabel{
+            font-size:.6rem; color:var(--muted); white-space:nowrap;
+            font-weight:500; min-width:90px; text-align:right;
+        }
+        /* CHAT */
+        #chat{
+            flex:1; overflow-y:auto; overflow-x:hidden;
+            -webkit-overflow-scrolling:touch;
+            padding:14px 12px 8px;
+            display:flex; flex-direction:column; gap:10px;
+            scroll-behavior:smooth;
+        }
+        #chat::-webkit-scrollbar{ display:none; }
+        .sname{
+            font-size:.58rem; color:var(--muted); letter-spacing:.05em;
+            text-transform:uppercase; font-weight:600; padding:0 4px; margin-bottom:2px;
+        }
+        .sname.r{ text-align:right; }
+        .msg{ display:flex; gap:8px; align-items:flex-end; animation:up .25s ease; }
+        @keyframes up{ from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+        .msg.user{ flex-direction:row-reverse; }
+        .micon{
+            width:26px; height:26px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:.75rem; flex-shrink:0;
+        }
+        .micon.bot{ background:#1a0810; border:1px solid rgba(232,84,122,.3); }
+        .micon.user{ background:#1e1e1e; border:1px solid var(--border); }
+        .bub{
+            max-width:80%; padding:10px 13px; border-radius:14px;
+            font-size:.87rem; line-height:1.7; word-break:break-word;
+        }
+        .msg.bot .bub{
+            background:var(--card); border:1px solid var(--border);
+            border-bottom-left-radius:3px; color:var(--text);
+        }
+        .msg.user .bub{
+            background:linear-gradient(135deg,#b02d52,var(--pink));
+            color:#fff; border-bottom-right-radius:3px;
+            box-shadow:0 3px 12px rgba(232,84,122,.25);
+        }
+        .bub strong{ color:var(--pink2); font-weight:600; }
+        .bub em{ color:#999; font-style:normal; }
+        .bub .hl{
+            background:rgba(232,84,122,.07); border-left:2px solid var(--pink);
+            padding:8px 10px; margin:8px 0; border-radius:0 6px 6px 0;
+            font-size:.81rem; color:#bbb; line-height:1.6;
+        }
+        .bub .warn{
+            background:rgba(251,191,36,.07); border-left:2px solid #fbbf24;
+            padding:8px 10px; margin:8px 0; border-radius:0 6px 6px 0;
+            font-size:.81rem; color:#c9971f; line-height:1.6;
+        }
+        .bub .tip{
+            background:rgba(74,222,128,.06); border-left:2px solid #4ade80;
+            padding:8px 10px; margin:8px 0; border-radius:0 6px 6px 0;
+            font-size:.81rem; color:#6ee7b7; line-height:1.6;
+        }
+        .bub ul,.bub ol{ margin:6px 0 4px 16px; }
+        .bub li{ margin-bottom:3px; color:#aaa; font-size:.82rem; }
+        /* TARJETA FINAL */
+        .fcard{
+            background:linear-gradient(135deg,#160810,#1e0d14);
+            border:1px solid rgba(232,84,122,.3);
+            border-radius:12px; padding:14px; margin:4px 0;
+        }
+        .fcard h3{
+            font-family:'Cormorant Garamond',serif; font-size:.95rem;
+            font-weight:600; color:var(--pink2); margin-bottom:8px;
+        }
+        .fcard p{ font-size:.78rem; color:#999; line-height:1.6; margin-bottom:4px; }
+        .fcard p strong{ color:var(--pink2); }
+        .fcard .resumen{
+            background:rgba(232,84,122,.05); border-radius:8px;
+            padding:10px; margin:8px 0; font-size:.77rem; color:#aaa; line-height:1.8;
+        }
+        .cbtns{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+        .cbtn{
+            display:inline-flex; align-items:center; gap:6px;
+            background:var(--pink); color:white; padding:10px 16px;
+            border-radius:8px; font-size:.78rem; font-weight:600;
+            text-decoration:none; min-height:44px; cursor:pointer;
+            border:none; font-family:'DM Sans',sans-serif;
+        }
+        .cbtn.green{ background:#25d366; }
+        .cbtn.ghost{
+            background:transparent; border:1px solid rgba(232,84,122,.4); color:var(--pink2);
+        }
+        /* TYPING */
+        .typing-row{ display:flex; gap:8px; align-items:flex-end; }
+        .typing-bub{
+            background:var(--card); border:1px solid var(--border);
+            border-radius:14px; border-bottom-left-radius:3px;
+            padding:10px 14px; display:flex; gap:5px; align-items:center;
+        }
+        .typing-bub span{
+            width:6px; height:6px; border-radius:50%;
+            background:var(--pink); animation:bounce 1.2s ease-in-out infinite;
+        }
+        .typing-bub span:nth-child(2){ animation-delay:.15s }
+        .typing-bub span:nth-child(3){ animation-delay:.3s }
+        @keyframes bounce{
+            0%,60%,100%{transform:translateY(0);opacity:.3}
+            30%{transform:translateY(-5px);opacity:1}
+        }
+        /* OPTIONS */
+        .opts-wrap{
+            padding:4px 0 6px 34px; display:flex;
+            flex-direction:column; gap:7px; animation:up .28s ease;
+        }
+        .opt{
+            background:transparent; border:1px solid rgba(232,84,122,.4);
+            color:var(--pink2); padding:11px 14px; border-radius:10px;
+            font-family:'DM Sans',sans-serif; font-size:.84rem; font-weight:500;
+            cursor:pointer; text-align:left; display:flex; align-items:center;
+            gap:8px; min-height:44px;
+        }
+        .opt::before{ content:'›'; font-size:1rem; opacity:.5; }
+        .opt:active{ background:#1a0810; border-color:var(--pink); }
+        /* INPUT */
+        .input-area{
+            flex-shrink:0; background:var(--black);
+            border-top:1px solid var(--border); padding:10px 12px;
+            padding-bottom:max(10px,env(safe-area-inset-bottom));
+        }
+        .input-shell{
+            display:flex; align-items:flex-end; gap:8px;
+            background:var(--card); border:1px solid var(--border);
+            border-radius:22px; padding:8px 8px 8px 14px; transition:border-color .2s;
+        }
+        .input-shell:focus-within{
+            border-color:var(--pink);
+            box-shadow:0 0 0 2px rgba(232,84,122,.12);
+        }
+        textarea{
+            flex:1; background:none; border:none; outline:none;
+            color:var(--text); font-family:'DM Sans',sans-serif;
+            font-size:.9rem; resize:none; min-height:24px; max-height:96px;
+            line-height:1.5; padding:2px 0; -webkit-appearance:none;
+        }
+        textarea::placeholder{ color:#3a3a3a; }
+        #sendBtn{
+            background:linear-gradient(135deg,#b02d52,var(--pink));
+            border:none; border-radius:50%; width:38px; height:38px; min-width:38px;
+            display:flex; align-items:center; justify-content:center;
+            cursor:pointer; color:white; flex-shrink:0;
+            box-shadow:0 3px 10px rgba(232,84,122,.3);
+            transition:transform .15s,opacity .2s;
+        }
+        #sendBtn:active{ transform:scale(.93); }
+        #sendBtn:disabled{ opacity:.25; box-shadow:none; }
+        .fnote{
+            text-align:center; font-size:.58rem; color:#2a2a2a;
+            margin-top:6px; letter-spacing:.04em; text-transform:uppercase;
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <header>
+        <div class="av-wrap">
+            <div class="av">🤖</div>
+            <div class="online"></div>
+        </div>
+        <div class="hinfo">
+            <h1>IA · Dr. Cifuentes</h1>
+            <p>Consulta Virtual · Reducción Mamaria</p>
+        </div>
+        <button class="share-hbtn" onclick="shareBot()">Compartir</button>
+    </header>
+
+    <div class="pbar">
+        <div class="ptrack"><div class="pfill" id="pf"></div></div>
+        <div class="plabel" id="pl">Iniciando...</div>
+    </div>
+
+    <div id="chat"></div>
+
+    <div class="input-area">
+        <div class="input-shell">
+            <textarea id="inp" placeholder="Escribe tu respuesta..." disabled></textarea>
+            <button id="sendBtn" onclick="send()" disabled>→</button>
+        </div>
+        <div class="fnote">IA entrenada por Dr. Ignacio Cifuentes · No reemplaza evaluación presencial</div>
+    </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// CONFIGURACIÓN AIRTABLE
+// ═══════════════════════════════════════════════════════════════
+const AIRTABLE_TOKEN = 'TU_TOKEN_AQUI'; // Personal Access Token de Airtable
+const AIRTABLE_BASE  = 'appic5CU63CJ4CXvR';
+const AIRTABLE_TABLE = 'tbl6YmfuordfHEyRI'; // Presupuestos
+
+async function guardarEnAirtable(){
+    try {
+        const ingreso = [
+            `Consulta Virtual Reducción Mamaria`,
+            `Tiempo decidiendo: ${P.tiempoDecidiendo}`,
+            `Síntomas: ${P.sintomas}`,
+            `Ocupación: ${P.ocupacion}`,
+            `Enfermedades: ${P.enfermedades}`,
+            `Medicamentos: ${P.medicamentos}`,
+            `Cirugías previas: ${P.cirugiasPrevias}`,
+            `MAC: ${P.mac}`,
+            `Peso estable: ${P.pesoEstable}`,
+            `Hijos/embarazos futuros: ${P.hijos}`,
+            `IMC: ${P.imc}`,
+            `Alcohol: ${P.alcohol}`,
+        ].join('\n');
+
+        const fields = {};
+        fields['fldkhuhLmRfzwVY65'] = P.nombre;                    // Nombre
+        fields['fldmxiRoSpnd29BDE'] = ['Reducción Mamaria'];        // Cirugia
+        fields['fld5e8r3KhftEVylp'] = P.correo || '';              // correo
+        fields['fldO2IJZto8AEcxfx'] = P.telefono || '';            // Telefono
+        fields['fldq3bie8RSq1H8Vp'] = P.prevision || '';           // Previsión
+        fields['fldeWiP54SHFFzlRD'] = P.edad || 0;                 // Edad
+        fields['fldqJX97AF2YaHyWN'] = P.pesoKg || 0;               // Peso
+        fields['fldb9oursq6NNPFWq'] = P.tallaM ? Math.round(P.tallaM * 100) : 0; // Talla en cm
+        fields['fldhlTLFMH6PKaVIs'] = ingreso;                     // Ingreso
+        if(P.alergias && !/ninguna|no/i.test(P.alergias)){
+            fields['fld6bWTSBg8VcHWFl'] = 'Sí';                   // Alergias
+        } else {
+            fields['fld6bWTSBg8VcHWFl'] = 'No';
+        }
+        const tabacoMap = {
+            'No fumo':'No',
+            'Sí fumo':'Sí',
+            'Ex-fumadora, más de 6 meses sin fumar':'Ex-fumadora',
+            'Ex-fumadora, menos de 6 meses sin fumar':'Ex-fumadora'
+        };
+        fields['fldglZXBXvMgCPenM'] = tabacoMap[P.fuma] || 'No';  // Tabaco
+
+        const resp = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE}/${AIRTABLE_TABLE}`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${AIRTABLE_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ records: [{ fields }] })
+        });
+        if(!resp.ok) console.warn('Airtable error:', await resp.text());
+    } catch(e){
+        console.warn('Error guardando en Airtable:', e);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ESTADO DE LA PACIENTE
+// ═══════════════════════════════════════════════════════════════
+const P = {
+    nombre:'', tiempoDecidiendo:'', sintomas:'', edad:0,
+    region:'', ocupacion:'', prevision:'', tramo:'',
+    enfermedades:'', medicamentos:'', fuma:'', alergias:'',
+    tallaM:0, pesoKg:0, imc:0, pesoEstable:'',
+    cirugiasPrevias:'', hijos:'', mac:'', alcohol:'',
+    correo:'', telefono:''
+};
+
+function calcIMC(){
+    if(P.pesoKg>0 && P.tallaM>0)
+        P.imc = parseFloat((P.pesoKg/(P.tallaM*P.tallaM)).toFixed(1));
+}
+
+function parseTallaPeso(str){
+    const nums = str.match(/\d+[.,]?\d*/g)||[];
+    if(nums.length>=2){
+        let a=parseFloat(nums[0].replace(',','.')),
+            b=parseFloat(nums[1].replace(',','.'));
+        if(a>3) a=a/100;
+        if(b>3) b=b/100;
+        if(a<2.5&&b>2.5){ P.tallaM=a; P.pesoKg=b; }
+        else if(b<2.5&&a>2.5){ P.tallaM=b; P.pesoKg=a; }
+        else { P.tallaM=a; P.pesoKg=b; }
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STEPS
+// ═══════════════════════════════════════════════════════════════
+const STEPS = [];
+
+// ── 0: BIENVENIDA
+STEPS.push({
+    prog:'Bienvenida',
+    msg:()=>`¡Hola! Soy una <strong>inteligencia artificial entrenada por el Dr. Ignacio Cifuentes</strong>, cirujano plástico acreditado en Chile. 🤖<br><br>Estoy aquí para acompañarte en esta primera consulta virtual sobre <strong>reducción mamaria</strong> — una cirugía que cambia la calidad de vida de miles de mujeres al año. 🌸<br><br>¿Me dices cómo te llamas?`,
+    mode:'text', ph:'Tu nombre...',
+    save:v=>{ P.nombre=v.trim().split(' ')[0]; },
+    next:()=>1
+});
+
+// ── 1: TIEMPO DECIDIENDO
+STEPS.push({
+    prog:'Tu historia',
+    msg:()=>`Qué lindo nombre, <strong>${P.nombre}</strong>. Mucho gusto. 😊<br><br>Antes de hablar de cirugía, quiero entenderte. ¿Cuánto tiempo llevas pensando en hacerte esta operación?`,
+    mode:'opts',
+    opts:()=>['Hace poco, recién me estoy informando','Entre 6 meses y 1 año','Más de 1 año, pero me daba miedo','Ya llevo mucho tiempo, estoy decidida'],
+    save:v=>{ P.tiempoDecidiendo=v; },
+    next:()=>2
+});
+
+// ── 2: SÍNTOMAS
+STEPS.push({
+    prog:'Tu historia',
+    msg:v=>{
+        const frases={
+            'Hace poco, recién me estoy informando':'Perfecto momento. Informarse bien es el primer paso más inteligente que puedes dar.',
+            'Entre 6 meses y 1 año':'6 meses pensando en esto me dice que no es un impulso. Es una decisión reflexionada.',
+            'Más de 1 año, pero me daba miedo':'El miedo es completamente normal. Y te digo algo: la mayoría de mis pacientes dice que esperó demasiado.',
+            'Ya llevo mucho tiempo, estoy decidida':'Me alegra que hayas dado este paso. Vamos a asegurarnos de que todo esté en orden para ti.'
+        };
+        return `${frases[v]||'Perfecto.'}<br><br>Cuéntame — ¿qué es lo que más te afecta en tu día a día?`;
+    },
+    mode:'opts',
+    opts:()=>['Dolor de espalda, cuello u hombros','Irritación en el pliegue','Me cuesta hacer ejercicio','Todo lo anterior, afecta mi vida completa 😔'],
+    save:v=>{ P.sintomas=v; },
+    next:()=>3
+});
+
+// ── 3: VALIDACIÓN CLÍNICA
+STEPS.push({
+    prog:'Tu historia',
+    msg:v=>{
+        const resp={
+            'Dolor de espalda, cuello u hombros':'Ese dolor es la indicación médica más reconocida para la reducción mamaria. La <strong>ASPS</strong> lo identifica como el principal criterio de elegibilidad. No es estética — es calidad de vida.',
+            'Irritación en el pliegue':'Las irritaciones crónicas bajo el pliegue mamario son una indicación médica documentada. En muchos casos, incluso las isapres pueden cubrir la cirugía por esa razón.',
+            'Me cuesta hacer ejercicio':'La incapacidad de realizar actividad física normal es otro criterio clínico reconocido por la <strong>Sociedad Americana de Cirujanos Plásticos</strong>. Muchas pacientes recuperan su vida activa a las 6-8 semanas de la cirugía.',
+            'Todo lo anterior, afecta mi vida completa 😔':'Que afecte tu vida completa es importante. Todo lo que describes tiene solución, y la reducción mamaria suele ser la intervención con mayor impacto positivo en calidad de vida de todas las cirugías plásticas.'
+        };
+        return `${resp[v]||'Anotado.'}<br><br>Para orientarte bien necesito conocerte un poco más. ¿Te hago algunas preguntas? No se va a sentir como un formulario, lo prometo. 😊`;
+    },
+    mode:'opts',
+    opts:()=>['Sí, adelante 😊','Claro, empecemos'],
+    save:()=>{},
+    next:()=>4
+});
+
+// ── 4: EDAD
+STEPS.push({
+    prog:'Datos personales',
+    msg:()=>`Perfecto. ¿Cuántos años tienes, ${P.nombre}?`,
+    mode:'text', ph:'Ej: 34',
+    save:v=>{ P.edad=parseInt(v)||0; },
+    next:()=>5
+});
+
+// ── 5: REGIÓN
+STEPS.push({
+    prog:'Datos personales',
+    msg:()=>`¿Eres de Santiago o de regiones?`,
+    mode:'opts',
+    opts:()=>['Santiago','Región Metropolitana (fuera de Santiago)','Otra región del país'],
+    save:v=>{ P.region=v; },
+    next:()=>6
+});
+
+// ── 6: OCUPACIÓN
+STEPS.push({
+    prog:'Datos personales',
+    msg:()=>`¿Y a qué te dedicas? <em>(esto me ayuda a orientar los tiempos de recuperación)</em>`,
+    mode:'text', ph:'Ej: Profesora, nutricionista, trabajo en oficina...',
+    save:v=>{ P.ocupacion=v; },
+    next:()=>7
+});
+
+// ── 7: PREVISIÓN
+STEPS.push({
+    prog:'Previsión',
+    msg:()=>`Una pregunta importante, ${P.nombre}: ¿cuál es tu previsión de salud?`,
+    mode:'opts',
+    opts:()=>['Fonasa','Isapre','Particular'],
+    save:v=>{ P.prevision=v; },
+    next:v=>{ if(v==='Fonasa') return 8; if(v==='Isapre') return '7i'; return 9; }
+});
+
+// ── 7i: ISAPRE INFO
+STEPS.push({
+    prog:'Previsión',
+    msg:()=>`Isapre — una buena noticia: en casos de <strong>macromastia documentada con síntomas funcionales</strong> (dolor, irritaciones, limitación física), muchas Isapres cubren parcialmente la reducción mamaria.<br><br><div class="hl">✨ Lo gestionamos juntas. El Dr. Cifuentes puede preparar el informe médico que respalda la indicación clínica para tu isapre.<br>✨ Si no hay cobertura, también se puede realizar de forma particular.</div>Sigamos para completar tu evaluación.`,
+    mode:'opts',
+    opts:()=>['Entendido, sigamos 😊'],
+    save:()=>{},
+    next:()=>9
+});
+
+// ── 8: TRAMO FONASA
+STEPS.push({
+    prog:'Previsión',
+    msg:()=>`¿En qué tramo Fonasa estás?`,
+    mode:'opts',
+    opts:()=>['Tramo A','Tramo B','Tramo C','Tramo D'],
+    save:v=>{ P.tramo=v; },
+    next:v=>{ if(v==='Tramo A') return '8a'; return 9; }
+});
+
+// ── 8a: TRAMO A ADVERTENCIA
+STEPS.push({
+    prog:'Previsión',
+    msg:()=>`Tramo A de Fonasa. Quiero ser transparente contigo:<br><br><div class="warn">⚠️ El Bono PAD <strong>no está disponible para Fonasa Tramo A</strong>.<br><br>Sin embargo, la cirugía se puede realizar de forma <strong>particular</strong> con el Dr. Cifuentes — con total acceso a las mismas condiciones de seguridad y calidad.</div>Sigamos con tu evaluación.`,
+    mode:'opts',
+    opts:()=>['Entendido, sigamos'],
+    save:()=>{},
+    next:()=>9
+});
+
+// ── 9: ENFERMEDADES
+STEPS.push({
+    prog:'Tu salud',
+    msg:()=>`${P.nombre}, ahora quiero conocer tu historial de salud — son preguntas para cuidarte, no para asustarte. 😊<br><br>¿Tienes alguna enfermedad crónica? Presión alta, diabetes, tiroides, resistencia a la insulina...`,
+    mode:'text', ph:'Ej: Hipotiroidismo · o "Ninguna"',
+    save:v=>{ P.enfermedades=v; },
+    next:()=>10
+});
+
+// ── 10: MEDICAMENTOS
+STEPS.push({
+    prog:'Tu salud',
+    msg:v=>{
+        const tienes=!/ninguna|no/i.test(v);
+        return `${tienes?'Anotado — lo consideraremos al evaluar tu caso. ':'Perfecto. '}¿Tomas algún medicamento de forma habitual? Incluye suplementos y vitaminas.`;
+    },
+    mode:'text', ph:'Ej: Levotiroxina · o "Ninguno"',
+    save:v=>{ P.medicamentos=v; },
+    next:()=>11
+});
+
+// ── 11: CIRUGÍAS PREVIAS
+STEPS.push({
+    prog:'Tu salud',
+    msg:()=>`¿Has tenido alguna cirugía mamaria previa? Biopsias, implantes, reducción...`,
+    mode:'opts',
+    opts:()=>['No, ninguna','Biopsia mamaria','Tengo implantes mamarios','Otra cirugía mamaria'],
+    save:v=>{ P.cirugiasPrevias=v; },
+    next:()=>12
+});
+
+// ── 12: TABACO
+STEPS.push({
+    prog:'Tu salud',
+    msg:v=>{
+        if(/implante/i.test(v)){
+            return `Importante anotarlo — si tienes implantes, la técnica quirúrgica se adapta para trabajar alrededor de ellos con seguridad. El Dr. Cifuentes lo evaluará en la consulta presencial.<br><br>¿Fumas actualmente?`;
+        }
+        return `¿Fumas actualmente?`;
+    },
+    mode:'opts',
+    opts:()=>['No fumo','Sí fumo','Ex-fumadora, más de 6 meses sin fumar','Ex-fumadora, menos de 6 meses sin fumar'],
+    save:v=>{ P.fuma=v; },
+    next:()=>13
+});
+
+// ── 13: ALERGIAS
+STEPS.push({
+    prog:'Tu salud',
+    msg:v=>{
+        const fumaAhora=/sí fumo/i.test(v);
+        const reciente=/menos de 6/i.test(v);
+        if(fumaAhora||reciente){
+            return `${fumaAhora?'Importante: t':'T'}endrás que llevar al menos <strong>4 a 6 meses sin fumar</strong> antes de la cirugía. El tabaco aumenta el riesgo de complicaciones y mala cicatrización.<br><br>${fumaAhora?'Cuando estés lista para ese paso, aquí estaremos. ':'Ya casi llegas. '}Sigamos 💪<br><br>¿Tienes alguna alergia conocida? Medicamentos, látex, anestésicos...`;
+        }
+        return `¿Tienes alguna alergia conocida? Medicamentos, látex, anestésicos...`;
+    },
+    mode:'text', ph:'Ej: Alergia a la penicilina · o "Ninguna"',
+    save:v=>{ P.alergias=v; },
+    next:()=>14
+});
+
+// ── 14: TALLA Y PESO
+STEPS.push({
+    prog:'Tu cuerpo',
+    msg:()=>`${P.nombre}, necesito dos datos: ¿cuál es tu <strong>talla</strong> y tu <strong>peso actual</strong>?`,
+    mode:'text', ph:'Ej: 1.62 m y 72 kg',
+    save:v=>{ parseTallaPeso(v); calcIMC(); },
+    next:()=>15
+});
+
+// ── 15: PESO ESTABLE
+STEPS.push({
+    prog:'Tu cuerpo',
+    msg:()=>{
+        const imcStr=P.imc>0?`Tu IMC estimado es <strong>${P.imc}</strong>. <br><br>`:'';
+        return `${imcStr}¿Tu peso es estable? ¿Hace cuánto tiempo?`;
+    },
+    mode:'opts',
+    opts:()=>['Sí, más de 6 meses estable','Sí, más de 1 año estable','Ha variado un poco','Bajé recientemente y sigo bajando'],
+    save:v=>{ P.pesoEstable=v; },
+    next:()=>16
+});
+
+// ── 16: HIJOS / EMBARAZOS FUTUROS
+STEPS.push({
+    prog:'Antecedentes',
+    msg:()=>`Una pregunta importante, ${P.nombre}: ¿tienes hijos? ¿Y planeas más embarazos en el futuro?`,
+    mode:'opts',
+    opts:()=>['No tengo hijos y no planeo','No tengo hijos pero podría en el futuro','Sí tengo hijos, familia completa','Sí tengo hijos, podría tener más'],
+    save:v=>{ P.hijos=v; },
+    next:v=>{ if(/podría.*futuro|podría tener más/i.test(v)) return '16a'; return 17; }
+});
+
+// ── 16a: ADVERTENCIA EMBARAZO FUTURO
+STEPS.push({
+    prog:'Antecedentes',
+    msg:()=>`Esto es importante comentarlo en la consulta.<br><br><div class="warn">⚠️ Un embarazo posterior no compromete tu salud, pero puede afectar el resultado de la cirugía — el volumen mamario puede aumentar nuevamente durante la gestación y la lactancia.<br><br>La recomendación general es esperar a tener la familia completa.</div>Lo hablaremos con detalle en la evaluación presencial. Sigamos.`,
+    mode:'opts',
+    opts:()=>['Entendido, sigamos 😊'],
+    save:()=>{},
+    next:()=>17
+});
+
+// ── 17: MAC
+STEPS.push({
+    prog:'Antecedentes',
+    msg:()=>`¿Usas algún método anticonceptivo hormonal actualmente?`,
+    mode:'opts',
+    opts:()=>['Sí, pastillas anticonceptivas','Sí, otro método hormonal','Método no hormonal','No uso ninguno'],
+    save:v=>{ P.mac=v; },
+    next:()=>18
+});
+
+// ── 18: ALCOHOL
+STEPS.push({
+    prog:'Antecedentes',
+    msg:()=>`¿Consumes alcohol?`,
+    mode:'opts',
+    opts:()=>['No consumo','Ocasionalmente, fines de semana','Frecuentemente','Raramente'],
+    save:v=>{ P.alcohol=v; },
+    next:()=>19
+});
+
+// ── 19: TRANSICIÓN A LA CIRUGÍA
+STEPS.push({
+    prog:'La cirugía',
+    msg:()=>`Perfecto, ${P.nombre}. Ya tengo todo lo que necesito para orientarte bien. 🌸<br><br>Ahora viene la parte más interesante: <strong>te cuento cómo es el proceso completo</strong>, desde la cirugía hasta el alta definitiva.<br><br>Lo hacemos a tu ritmo. ¿Lista?`,
+    mode:'opts',
+    opts:()=>['Lista 👂','Sí, cuéntame todo'],
+    save:()=>{},
+    next:()=>20
+});
+
+// ── 20: LA TÉCNICA
+STEPS.push({
+    prog:'La cirugía',
+    msg:()=>`La reducción mamaria se realiza bajo <strong>anestesia general</strong>. Dura 2 a 3 horas. Hospitalizas una noche y al día siguiente estás en casa.<br><br>Hay algo que a casi todas sorprende: no es solo "quitar tejido". Es una <strong>reconstrucción completa</strong>.<br><br>¿Sabes cómo se decide la técnica quirúrgica?`,
+    mode:'opts',
+    opts:()=>['No, ¿de qué depende?','¿Hay cicatriz siempre?','Quiero saber todo'],
+    save:()=>{},
+    next:()=>21
+});
+
+// ── 21: TÉCNICAS ISAPS
+STEPS.push({
+    prog:'La cirugía',
+    msg:()=>`Según los estándares de la <strong>ISAPS</strong>, hay dos técnicas principales:<br><br><div class="hl">🔹 <strong>Incisión en T invertida (ancla):</strong> para reducciones medianas y grandes. La cicatriz rodea la aréola, baja verticalmente y va en el pliegue horizontal.<br><br>🔹 <strong>Diseño lollipop:</strong> para reducciones menores. Solo la cicatriz vertical y alrededor de la aréola — sin la línea horizontal.</div>La aréola <em>casi siempre</em> se mantiene conectada a sus nervios y vasos. Eso preserva la sensibilidad y, en muchos casos, la lactancia futura.<br><br>¿Tienes algún miedo específico sobre la cirugía?`,
+    mode:'opts',
+    opts:()=>['Me da miedo la anestesia','¿Cómo quedan las cicatrices?','¿Podré amamantar después?','¿Perderé sensibilidad?'],
+    save:()=>{},
+    next:()=>22
+});
+
+// ── 22: MIEDOS
+STEPS.push({
+    prog:'Tus dudas',
+    msg:v=>{
+        const r={
+            'Me da miedo la anestesia':'El miedo a la anestesia es el más común. Un dato real: el riesgo anestésico es <strong>menor al 1%</strong>. No estarás sola: el equipo de anestesia te acompaña desde antes de entrar al pabellón hasta que despiertas.',
+            '¿Cómo quedan las cicatrices?':'La cicatriz depende de la técnica. Con la T invertida, la parte más visible queda en el pliegue natural — cubierta por ropa interior. Al principio es rosada, a los 12-18 meses es una línea fina. La ISAPS documenta resultados muy satisfactorios con cuidado postoperatorio adecuado.',
+            '¿Podré amamantar después?':'Según la ISAPS, en la gran mayoría de los casos la aréola se mantiene conectada preservando la lactancia. Solo en reducciones de gran volumen puede afectarse. Lo evaluamos caso a caso en consulta.',
+            '¿Perderé sensibilidad?':'La sensibilidad puede cambiar temporalmente — más o menos sensibilidad en el pezón. En la mayoría de los casos se normaliza dentro de los primeros meses. Es un efecto transitorio, no permanente.'
+        };
+        return `${r[v]||''}<br><br>¿Tienes otra duda?`;
+    },
+    mode:'opts',
+    opts:()=>['¿Cuándo vuelvo al trabajo?','¿Cuándo puedo hacer ejercicio?','¿La cubre mi previsión?','Ya entendí, continúa'],
+    save:()=>{},
+    next:()=>23
+});
+
+// ── 23: RECUPERACIÓN
+STEPS.push({
+    prog:'Recuperación',
+    msg:v=>{
+        const r={
+            '¿Cuándo vuelvo al trabajo?':'Si tu trabajo es de escritorio: <strong>7 a 10 días</strong>. Si implica esfuerzo físico o cargar peso: <strong>4 a 6 semanas</strong>.',
+            '¿Cuándo puedo hacer ejercicio?':'Caminatas suaves desde la semana 2. Ejercicio moderado desde la semana 6. Deporte de alto impacto desde los 2-3 meses, según protocolo ISAPS.',
+            '¿La cubre mi previsión?':`${P.prevision==='Fonasa'&&P.tramo&&P.tramo!=='Tramo A'?'Con Fonasa '+P.tramo+', puedes acceder al <strong>Bono PAD</strong>. El copago varía según el tramo.':P.prevision==='Isapre'?'Si tienes macromastia documentada con síntomas funcionales, tu Isapre podría cubrir parte de la cirugía. Te ayudamos a gestionarlo.':'La cirugía se realiza de forma particular con el Dr. Cifuentes, con total flexibilidad.'}`,
+            'Ya entendí, continúa':'Perfecto — sigamos al siguiente paso.'
+        };
+        return `${r[v]||''}<br><br>El <strong>resultado final</strong> se ve entre los 6 y 12 meses. El 60-70% ya se nota al primer mes. La mayoría de las pacientes dice que fue la mejor decisión de su vida. 🌸`;
+    },
+    mode:'opts',
+    opts:()=>['¿Qué exámenes necesito?','Quiero agendar mi evaluación','Tengo más dudas'],
+    save:()=>{},
+    next:()=>24
+});
+
+// ── 24: EXÁMENES / AGENDAR
+STEPS.push({
+    prog:'Próximos pasos',
+    msg:v=>{
+        if(/exámenes/i.test(v)){
+            return `Los exámenes preoperatorios son:<br><br><div class="hl">• Hemograma completo<br>• Perfil bioquímico<br>• Coagulación<br>• Examen de orina<br>• Electrocardiograma (ECG)<br>• Ecografía mamaria bilateral</div>Se pueden hacer en cualquier laboratorio y se envían digitalmente. ¿Quieres dar el siguiente paso?`;
+        }
+        return `¡Perfecto! El siguiente paso es la evaluación — presencial o por telemedicina con fotos. Para coordinarla, necesito tus datos de contacto.`;
+    },
+    mode:'opts',
+    opts:()=>['Sí, quiero dejar mis datos 🌸','Todavía tengo dudas'],
+    save:()=>{},
+    next:()=>25
+});
+
+// ── 25: CORREO
+STEPS.push({
+    prog:'Tus datos',
+    msg:()=>`Para coordinarte la evaluación, ¿me puedes dejar tu <strong>correo electrónico</strong>?`,
+    mode:'text', ph:'tu@correo.com',
+    save:v=>{ P.correo=v.trim(); },
+    next:()=>26
+});
+
+// ── 26: TELÉFONO
+STEPS.push({
+    prog:'Tus datos',
+    msg:()=>`Y tu <strong>número de WhatsApp</strong> para contactarte:`,
+    mode:'text', ph:'Ej: +56 9 8765 4321',
+    save:v=>{ P.telefono=v.trim(); },
+    next:()=>'SAVE'
+});
+
+// ── 27: CIERRE EMOCIONAL
+STEPS.push({
+    prog:'Cierre',
+    msg:()=>`Antes de terminar, ${P.nombre} — de todo lo que conversamos, ¿hubo algo que te tranquilizó especialmente?`,
+    mode:'opts',
+    opts:()=>['Saber que en muchos casos se preserva la lactancia','Conocer los tiempos reales de recuperación','Me aclaró mucho sobre las cicatrices','Todo fue muy útil, gracias 🙏'],
+    save:()=>{},
+    next:()=>'END'
+});
+
+// ═══════════════════════════════════════════════════════════════
+// ÍNDICE SECUENCIAL
+// ═══════════════════════════════════════════════════════════════
+const STEP_KEYS = [0,1,2,3,4,5,6,7,'7i',8,'8a',9,10,11,12,13,14,15,16,'16a',17,18,19,20,21,22,23,24,25,26,27];
+const STEP_IDX = {};
+STEP_KEYS.forEach((k,i)=>{ STEP_IDX[k]=i; });
+
+// ═══════════════════════════════════════════════════════════════
+// ENGINE
+// ═══════════════════════════════════════════════════════════════
+let currentKey = 0;
+const chat   = document.getElementById('chat');
+const inp    = document.getElementById('inp');
+const sbtn   = document.getElementById('sendBtn');
+const PROG_TOTAL = STEP_KEYS.length;
+
+function setProgress(key){
+    const idx=STEP_IDX[key]||0;
+    const pct=Math.min(Math.round(idx/PROG_TOTAL*100),100);
+    document.getElementById('pf').style.width=pct+'%';
+    const step=STEPS[idx];
+    document.getElementById('pl').textContent=(step?.prog||'...')+' · '+pct+'%';
+}
+
+function addMsg(html,role){
+    if(!html) return;
+    const sn=document.createElement('div');
+    sn.className='sname'+(role==='user'?' r':'');
+    sn.textContent=role==='bot'?'IA · Dr. Cifuentes':(P.nombre||'Tú');
+    chat.appendChild(sn);
+    const row=document.createElement('div');
+    row.className='msg '+role;
+    row.innerHTML=`<div class="micon ${role}">${role==='bot'?'🤖':'👤'}</div><div class="bub">${html}</div>`;
+    chat.appendChild(row);
+    scrollDown();
+}
+
+function scrollDown(){
+    setTimeout(()=>{ chat.scrollTop=chat.scrollHeight; },60);
+}
+
+function showTyping(){
+    const d=document.createElement('div');
+    d.id='trow';
+    d.innerHTML=`<div class="sname">IA · Dr. Cifuentes</div><div class="typing-row"><div class="micon bot">🤖</div><div class="typing-bub"><span></span><span></span><span></span></div></div>`;
+    chat.appendChild(d);
+    scrollDown();
+}
+
+function rmTyping(){ const t=document.getElementById('trow'); if(t)t.remove(); }
+
+function showOpts(opts){
+    const resolved=typeof opts==='function'?opts():opts;
+    if(!resolved||!resolved.length) return;
+    const div=document.createElement('div');
+    div.className='opts-wrap'; div.id='odiv';
+    resolved.forEach(o=>{
+        const b=document.createElement('button');
+        b.className='opt'; b.textContent=o;
+        b.onclick=()=>pick(o);
+        div.appendChild(b);
+    });
+    chat.appendChild(div);
+    scrollDown();
+}
+
+function rmOpts(){ const d=document.getElementById('odiv'); if(d)d.remove(); }
+
+function setInputMode(mode,ph){
+    if(mode==='text'){
+        inp.disabled=false; sbtn.disabled=false;
+        inp.placeholder=ph||'Escribe tu respuesta...';
+        setTimeout(()=>inp.focus(),100);
+    } else {
+        inp.disabled=true; sbtn.disabled=true;
+    }
+}
+
+function pick(val){ rmOpts(); addMsg(val,'user'); advance(val); }
+
+function send(){
+    const val=inp.value.trim();
+    if(!val) return;
+    inp.value=''; inp.style.height='auto';
+    addMsg(val,'user'); advance(val);
+}
+
+async function advance(userVal){
+    setInputMode('none');
+    const idx=STEP_IDX[currentKey];
+    const step=STEPS[idx];
+    if(!step) return;
+    if(step.save) step.save(userVal);
+    let nextKey=step.next(userVal);
+
+    if(nextKey==='SAVE'){
+        currentKey='SAVE';
+        // Guardar en Airtable y luego ir al cierre emocional
+        showTyping();
+        await guardarEnAirtable();
+        setTimeout(()=>{
+            rmTyping();
+            currentKey=27;
+            setProgress(27);
+            renderStep(userVal);
+        }, 900+Math.random()*400);
+        return;
+    }
+
+    if(nextKey==='END'){
+        currentKey='END';
+        showBotMsg(buildCierre(userVal), null);
+        return;
+    }
+
+    currentKey=nextKey;
+    setProgress(currentKey);
+    const delay=850+Math.random()*500;
+    setTimeout(()=>{
+        showTyping();
+        setTimeout(()=>{ rmTyping(); renderStep(userVal); }, delay);
+    },200);
+}
+
+function renderStep(prevVal){
+    const idx=STEP_IDX[currentKey];
+    const step=STEPS[idx];
+    if(!step){ setInputMode('none'); return; }
+    const msg=typeof step.msg==='function'?step.msg(prevVal):step.msg;
+    addMsg(msg,'bot');
+    if(step.mode==='opts'){ showOpts(step.opts); setInputMode('none'); }
+    else if(step.mode==='text'){ setInputMode('text',step.ph); }
+    else { setInputMode('none'); }
+}
+
+function showBotMsg(html,nextAction){
+    setInputMode('none');
+    setTimeout(()=>{
+        showTyping();
+        setTimeout(()=>{ rmTyping(); addMsg(html,'bot'); if(nextAction) nextAction(); },900+Math.random()*400);
+    },200);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TARJETA FINAL
+// ═══════════════════════════════════════════════════════════════
+function buildCierre(ultimaRespuesta){
+    const compartir=/compartir/i.test(ultimaRespuesta);
+    const prevInfo = P.prevision==='Fonasa'&&P.tramo&&P.tramo!=='Tramo A'
+        ? `${P.prevision} ${P.tramo} — Bono PAD ✅`
+        : `${P.prevision}${P.tramo?' '+P.tramo:''} — cirugía particular`;
+
+    const waMsg = encodeURIComponent(
+        `Hola, soy ${P.nombre}. Completé la consulta virtual sobre reducción mamaria y quiero agendar mi evaluación con el Dr. Cifuentes.`
+    );
+
+    return `<div class="fcard">
+        <h3>✦ Fue un placer acompañarte, ${P.nombre} 🌸</h3>
+        <div class="resumen">
+            <strong>Previsión:</strong> ${prevInfo}<br>
+            ${P.imc>0?`<strong>IMC estimado:</strong> ${P.imc}<br>`:''}
+            <strong>Síntomas:</strong> ${P.sintomas||'Reducción mamaria'}<br>
+            <strong>Alergias:</strong> ${P.alergias||'No referidas'}<br>
+            ${P.correo?`<strong>Correo:</strong> ${P.correo}<br>`:''}
+            ${P.telefono?`<strong>Teléfono:</strong> ${P.telefono}<br>`:''}
+        </div>
+        <p>Tus datos han sido enviados al equipo del Dr. Cifuentes. Te contactaremos a la brevedad para coordinar tu evaluación. 💗</p>
+        <div class="cbtns">
+            <a class="cbtn" href="https://wa.me/56932439271?text=${waMsg}" target="_blank">💬 Agendar por WhatsApp</a>
+            <button class="cbtn ghost" onclick="shareBot()">📲 Compartir consulta</button>
+        </div>
+        ${compartir?`<div style="margin-top:12px"><button class="cbtn green" onclick="shareBot()">💬 Compartir por WhatsApp ahora</button></div>`:''}
+        <p style="margin-top:12px;font-size:.7rem;color:#3a3a3a">Dr. Ignacio Cifuentes · Cirujano Plástico Acreditado 🌸</p>
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COMPARTIR
+// ═══════════════════════════════════════════════════════════════
+function shareBot(){
+    const url=window.location.href;
+    const texto=`Hola! Te comparto esta consulta virtual sobre reducción mamaria del Dr. Ignacio Cifuentes — puedes informarte paso a paso desde tu celular 🌸\n${url}`;
+    if(navigator.share){
+        navigator.share({title:'Consulta Virtual Reducción Mamaria · Dr. Cifuentes',text:texto,url}).catch(()=>{});
+    } else {
+        window.open(`https://wa.me/?text=${encodeURIComponent(texto)}`,'_blank');
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════════════
+inp.addEventListener('input',function(){
+    this.style.height='auto';
+    this.style.height=Math.min(this.scrollHeight,96)+'px';
+});
+inp.addEventListener('focus',()=>setTimeout(scrollDown,400));
+window.onload=()=>{
+    setInputMode('none');
+    setTimeout(()=>{
+        showTyping();
+        setTimeout(()=>{
+            rmTyping();
+            const s=STEPS[0];
+            addMsg(s.msg(),'bot');
+            setInputMode('text',s.ph);
+            setProgress(0);
+        },1200);
+    },400);
+};
+</script>
+</body>
+</html>
